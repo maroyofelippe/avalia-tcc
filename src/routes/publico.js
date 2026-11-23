@@ -3,6 +3,7 @@ const rateLimit = require('express-rate-limit');
 const wrap = require('../utils/asyncHandler');
 const home = require('../controllers/homeController');
 const votacao = require('../controllers/votacaoController');
+const { exigirLogin } = require('../middlewares/auth');
 const dashboard = require('../controllers/dashboardController');
 
 // Feira escolar costuma sair por um único IP (NAT do Wi-Fi), por isso o limite é folgado.
@@ -23,7 +24,8 @@ router.get('/votar/:eventoId/projetos', wrap(votacao.projetos));
 router.get('/votar/:eventoId/projetos/:projetoId', wrap(votacao.avaliarForm));
 router.post('/votar/:eventoId/projetos/:projetoId', limiteVotos, wrap(votacao.avaliar));
 
-router.get('/dashboard', wrap(dashboard.lista));
-router.get('/dashboard/:eventoId', wrap(dashboard.view));
+// Resultados: somente admin e usuários cadastrados e ativos (autorizados pelo admin)
+router.get('/dashboard', exigirLogin, wrap(dashboard.lista));
+router.get('/dashboard/:eventoId', exigirLogin, wrap(dashboard.view));
 
 module.exports = router;

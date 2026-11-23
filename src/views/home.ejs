@@ -1,6 +1,6 @@
 <div class="text-center my-4">
   <h1 class="h2">Avaliação de TCC</h1>
-  <p class="text-muted">Dê sua nota para os trabalhos expostos e acompanhe o resultado em tempo real.</p>
+  <p class="text-muted">Dê sua nota para os trabalhos expostos.</p>
 </div>
 
 <% if (!eventos.length) { %>
@@ -25,7 +25,7 @@
             <% } else { %>
               <button class="btn btn-secondary flex-fill" disabled>Votação encerrada</button>
             <% } %>
-            <a class="btn btn-outline-dark flex-fill" href="/dashboard/<%= e.id %>">Resultados</a>
+            <% if (usuario) { %><a class="btn btn-outline-dark flex-fill" href="/dashboard/<%= e.id %>">Resultados</a><% } %>
           </div>
         </div>
       </div>

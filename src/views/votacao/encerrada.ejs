@@ -1,3 +1,3 @@
 <%- include('../partials/evento-cabecalho', { evento }) %>
 <div class="alert alert-secondary">A votação deste evento está encerrada. Obrigado pela participação!</div>
-<a class="btn btn-outline-dark" href="/dashboard/<%= evento.id %>">Ver resultados</a>
+<% if (usuario) { %><a class="btn btn-outline-dark" href="/dashboard/<%= evento.id %>">Ver resultados</a><% } %>

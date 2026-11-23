@@ -1,0 +1,27 @@
+<%- include('../../partials/evento-cabecalho', { evento }) %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h5 mb-0">Projetos (TCCs)</h2>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="/admin/eventos">Voltar</a>
+    <a class="btn btn-danger" href="/admin/eventos/<%= evento.id %>/projetos/novo">Novo projeto</a>
+  </div>
+</div>
+<div class="card"><div class="table-responsive">
+  <table class="table mb-0">
+    <thead><tr><th>Título</th><th>Curso</th><th>Turma</th><th>Ano</th><th></th></tr></thead>
+    <tbody>
+      <% projetos.forEach(function (p) { %>
+        <tr>
+          <td><%= p.titulo %></td><td><%= p.curso || '' %></td><td><%= p.turma %></td><td><%= p.ano %></td>
+          <td class="text-end text-nowrap">
+            <a class="btn btn-sm btn-outline-secondary" href="/admin/eventos/<%= evento.id %>/projetos/<%= p.id %>/editar">Editar</a>
+            <form class="d-inline" method="post" action="/admin/eventos/<%= evento.id %>/projetos/<%= p.id %>/excluir" data-confirm="Excluir o projeto e seus votos?">
+              <button class="btn btn-sm btn-outline-danger">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+      <% if (!projetos.length) { %><tr><td colspan="5" class="text-muted">Nenhum projeto cadastrado.</td></tr><% } %>
+    </tbody>
+  </table>
+</div></div>

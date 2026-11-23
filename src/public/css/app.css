@@ -1,0 +1,32 @@
+:root {
+  --cps: #b01c24;
+  --prom: #198754;
+  --neu: #e0a800;
+  --det: #dc3545;
+}
+.bg-cps { background-color: var(--cps); }
+body { background: #f6f7f9; }
+.card { border: 0; box-shadow: 0 1px 3px rgba(0, 0, 0, .08); }
+.logo-unidade { height: 56px; max-width: 160px; object-fit: contain; }
+.logo-mini { height: 36px; width: 36px; object-fit: contain; }
+.table > :not(caption) > * > * { vertical-align: middle; }
+
+/* Seletor de nota 0–10 (toque confortável no celular) */
+.nota-grupo { display: flex; flex-wrap: wrap; gap: .4rem; }
+.nota-grupo input { position: absolute; opacity: 0; pointer-events: none; }
+.nota-grupo label {
+  min-width: 2.7rem; height: 2.7rem; display: inline-flex; align-items: center; justify-content: center;
+  border: 2px solid #ced4da; border-radius: .6rem; background: #fff; font-weight: 600; cursor: pointer; user-select: none;
+}
+.nota-grupo input:focus-visible + label { outline: 3px solid #0d6efd55; }
+.nota-grupo input:checked + label.n-det { background: var(--det); border-color: var(--det); color: #fff; }
+.nota-grupo input:checked + label.n-neu { background: var(--neu); border-color: var(--neu); color: #212529; }
+.nota-grupo input:checked + label.n-pro { background: var(--prom); border-color: var(--prom); color: #fff; }
+
+/* Dashboard */
+.kpi { text-align: center; padding: 1rem; }
+.kpi .valor { font-size: 2.4rem; font-weight: 700; line-height: 1.1; }
+.kpi .rotulo { color: #6c757d; font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; }
+.grafico { position: relative; height: 300px; }
+.nps-pos { color: var(--prom); } .nps-med { color: var(--neu); } .nps-neg { color: var(--det); }
+.progress-nps { height: 1.1rem; }

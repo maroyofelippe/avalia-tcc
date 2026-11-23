@@ -1,0 +1,27 @@
+<h1 class="h4 mb-3">Painel</h1>
+<div class="row g-3 mb-4">
+  <% [['Unidades', totais.unidades], ['Eventos', totais.eventos], ['Projetos', totais.projetos], ['Questões ativas', totais.questoes], ['Pessoas votantes', totais.avaliadores], ['Notas registradas', totais.respostas]].forEach(function (c) { %>
+    <div class="col-6 col-md-4 col-lg-2"><div class="card kpi"><div class="valor"><%= c[1] %></div><div class="rotulo"><%= c[0] %></div></div></div>
+  <% }) %>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+  <h2 class="h5 mb-0">Eventos recentes</h2>
+  <a class="btn btn-sm btn-danger" href="/admin/eventos/novo">Novo evento</a>
+</div>
+<div class="card"><div class="table-responsive">
+  <table class="table mb-0">
+    <thead><tr><th>Evento</th><th>Unidade</th><th>Votação</th><th></th></tr></thead>
+    <tbody>
+      <% eventos.forEach(function (e) { %>
+        <tr>
+          <td><%= e.nome %> <span class="text-muted small">(<%= e.ano %>)</span></td>
+          <td><%= e.Unidade.nome %></td>
+          <td><span class="badge text-bg-<%= e.votacaoAberta ? 'success' : 'secondary' %>"><%= e.votacaoAberta ? 'Aberta' : 'Encerrada' %></span></td>
+          <td class="text-end"><a class="btn btn-sm btn-outline-dark" href="/dashboard/<%= e.id %>">Dashboard</a></td>
+        </tr>
+      <% }) %>
+      <% if (!eventos.length) { %><tr><td colspan="4" class="text-muted">Nenhum evento cadastrado.</td></tr><% } %>
+    </tbody>
+  </table>
+</div></div>

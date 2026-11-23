@@ -1,0 +1,74 @@
+<div id="dash" data-evento="<%= evento.id %>" data-intervalo="<%= intervaloSeg %>">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <%- include('../partials/evento-cabecalho', { evento }) %>
+    <div class="text-end small text-muted">
+      <div>Atualizado às <strong id="atualizado-em">—</strong></div>
+      <div>Próxima atualização em <strong id="contagem">—</strong> (a cada <%= Math.round(intervaloSeg / 60 * 10) / 10 %> min)</div>
+      <button id="btn-atualizar" class="btn btn-sm btn-outline-dark mt-1">Atualizar agora</button>
+      <div id="erro-atualizacao" class="text-danger d-none">Falha ao atualizar; tentaremos novamente.</div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-lg-3"><div class="card kpi"><div class="valor" id="kpi-votos">0</div><div class="rotulo">Votos (avaliações)</div></div></div>
+    <div class="col-6 col-lg-3"><div class="card kpi"><div class="valor" id="kpi-avaliadores">0</div><div class="rotulo">Pessoas votantes</div></div></div>
+    <div class="col-6 col-lg-3"><div class="card kpi"><div class="valor" id="kpi-nps">—</div><div class="rotulo">NPS da feira</div></div></div>
+    <div class="col-6 col-lg-3"><div class="card kpi">
+      <div class="small"><span class="nps-pos fw-bold" id="kpi-prom">0</span> promotores ·
+        <span class="nps-med fw-bold" id="kpi-neu">0</span> neutros ·
+        <span class="nps-neg fw-bold" id="kpi-det">0</span> detratores</div>
+      <div class="rotulo mt-1">Notas de 0–6 detratores · 7–8 neutros · 9–10 promotores</div>
+    </div></div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-lg-8"><div class="card"><div class="card-body">
+      <h2 class="h6">NPS por TCC</h2>
+      <div class="grafico" id="wrap-nps-projetos"><canvas id="g-nps-projetos"></canvas></div>
+      <div class="small text-muted mt-2">Faixas: abaixo de 0 crítico · 0–49 a melhorar · 50 ou mais qualidade/excelência</div>
+    </div></div></div>
+    <div class="col-12 col-lg-4"><div class="card"><div class="card-body">
+      <h2 class="h6">Distribuição geral das notas</h2>
+      <div class="grafico"><canvas id="g-distribuicao"></canvas></div>
+    </div></div></div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-lg-8"><div class="card"><div class="card-body">
+      <h2 class="h6">Votos por TCC</h2>
+      <div class="grafico" id="wrap-votos-projetos"><canvas id="g-votos-projetos"></canvas></div>
+    </div></div></div>
+    <div class="col-12 col-md-6 col-lg-4"><div class="card"><div class="card-body">
+      <h2 class="h6">Faixa etária dos votantes</h2>
+      <div class="grafico"><canvas id="g-faixa"></canvas></div>
+    </div></div></div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-md-6 col-lg-4"><div class="card"><div class="card-body">
+      <h2 class="h6">Relação com a unidade</h2>
+      <div class="grafico"><canvas id="g-relacao"></canvas></div>
+    </div></div></div>
+    <div class="col-12 col-lg-8"><div class="card"><div class="card-body">
+      <h2 class="h6">NPS por questão</h2>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0"><thead><tr><th>Questão</th><th class="text-end">Notas</th><th class="text-end">NPS</th></tr></thead>
+        <tbody id="tbl-questoes"></tbody></table>
+      </div>
+    </div></div></div>
+  </div>
+
+  <div class="card"><div class="card-body">
+    <h2 class="h6">Ranking dos trabalhos</h2>
+    <div class="table-responsive">
+      <table class="table table-sm table-striped mb-0">
+        <thead><tr><th>#</th><th>Trabalho</th><th>Turma</th><th class="text-end">Votos</th>
+          <th class="text-end">Prom.</th><th class="text-end">Neutros</th><th class="text-end">Detr.</th><th class="text-end">NPS</th></tr></thead>
+        <tbody id="tbl-projetos"></tbody>
+      </table>
+    </div>
+  </div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="/js/dashboard.js"></script>

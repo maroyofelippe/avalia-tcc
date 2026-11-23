@@ -1,0 +1,24 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h4 mb-0">Banco de questões</h1>
+  <a class="btn btn-danger" href="/admin/questoes/novo">Nova questão</a>
+</div>
+<div class="card"><div class="table-responsive">
+  <table class="table mb-0">
+    <thead><tr><th>Questão</th><th>Situação</th><th></th></tr></thead>
+    <tbody>
+      <% questoes.forEach(function (q) { %>
+        <tr>
+          <td><%= q.texto %><% if (q.padrao) { %> <span class="badge text-bg-light">padrão</span><% } %></td>
+          <td><span class="badge text-bg-<%= q.ativa ? 'success' : 'secondary' %>"><%= q.ativa ? 'Ativa' : 'Inativa' %></span></td>
+          <td class="text-end text-nowrap">
+            <a class="btn btn-sm btn-outline-secondary" href="/admin/questoes/<%= q.id %>/editar">Editar</a>
+            <form class="d-inline" method="post" action="/admin/questoes/<%= q.id %>/excluir" data-confirm="Excluir esta questão?">
+              <button class="btn btn-sm btn-outline-danger">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div>
+<p class="small text-muted mt-2">Para escolher quais questões aparecem em um evento, use o botão "Questões" na lista de eventos.</p>

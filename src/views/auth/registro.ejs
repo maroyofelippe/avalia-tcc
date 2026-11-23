@@ -1,0 +1,32 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+    <div class="card">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-3">Cadastro de usuário</h1>
+        <p class="text-muted small">Use seu e-mail institucional (<strong><%= dominio %></strong>). O acesso é liberado após aprovação do administrador.</p>
+        <% if (erro) { %><div class="alert alert-danger py-2"><%= erro %></div><% } %>
+        <form method="post" action="/registro">
+          <div class="mb-3">
+            <label class="form-label" for="nome">Nome completo</label>
+            <input class="form-control" id="nome" name="nome" value="<%= dados.nome || '' %>" maxlength="120" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="email">E-mail institucional</label>
+            <input class="form-control" type="email" id="email" name="email" value="<%= dados.email || '' %>" placeholder="nome<%= dominio %>" pattern="[A-Za-z0-9._%+\-]+@cps\.sp\.gov\.br" title="Use um e-mail @cps.sp.gov.br" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="senha">Senha</label>
+            <input class="form-control" type="password" id="senha" name="senha" minlength="8" required autocomplete="new-password">
+            <div class="form-text">Mínimo de 8 caracteres, com letras e números.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="confirmacao">Confirmar senha</label>
+            <input class="form-control" type="password" id="confirmacao" name="confirmacao" minlength="8" required autocomplete="new-password">
+          </div>
+          <button class="btn btn-danger w-100">Cadastrar</button>
+        </form>
+        <div class="text-center mt-3 small"><a href="/login">Já tenho cadastro</a></div>
+      </div>
+    </div>
+  </div>
+</div>

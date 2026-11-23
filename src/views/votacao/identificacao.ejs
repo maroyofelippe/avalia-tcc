@@ -1,0 +1,32 @@
+<%- include('../partials/evento-cabecalho', { evento }) %>
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-5">
+    <div class="card">
+      <div class="card-body p-4">
+        <h2 class="h5">Antes de votar</h2>
+        <p class="text-muted small">Não pedimos e-mail nem sobrenome. Estes dados servem apenas para estatísticas do evento (por exemplo, faixa etária do público).</p>
+        <% if (erro) { %><div class="alert alert-danger py-2"><%= erro %></div><% } %>
+        <form method="post" action="/votar/<%= evento.id %>">
+          <div class="mb-3">
+            <label class="form-label" for="alias">Nome ou apelido</label>
+            <input class="form-control form-control-lg" id="alias" name="alias" maxlength="60" value="<%= dados.alias || '' %>" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="relacao">Relação com a unidade</label>
+            <select class="form-select form-select-lg" id="relacao" name="relacao" required>
+              <option value="">Selecione…</option>
+              <% [['aluno','Aluno'],['ex_aluno','Ex-aluno'],['responsavel','Responsável'],['professor','Professor']].forEach(function (o) { %>
+                <option value="<%= o[0] %>" <%= dados.relacao === o[0] ? 'selected' : '' %>><%= o[1] %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="data_nascimento">Data de nascimento</label>
+            <input class="form-control form-control-lg" type="date" id="data_nascimento" name="data_nascimento" value="<%= dados.dataNascimento || '' %>" max="<%= new Date().toISOString().slice(0, 10) %>" required>
+          </div>
+          <button class="btn btn-danger btn-lg w-100">Continuar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

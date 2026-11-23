@@ -1,0 +1,37 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h4 mb-0">Eventos</h1>
+  <a class="btn btn-danger" href="/admin/eventos/novo">Novo evento</a>
+</div>
+
+<div class="row g-3">
+  <% eventos.forEach(function (e) { %>
+    <div class="col-12">
+      <div class="card"><div class="card-body">
+        <div class="d-flex flex-wrap justify-content-between gap-2">
+          <div>
+            <h2 class="h5 mb-0"><%= e.nome %> <span class="text-muted small">(<%= e.ano %>)</span>
+              <% if (!e.ativo) { %><span class="badge text-bg-secondary">Inativo</span><% } %></h2>
+            <div class="text-muted small"><%= e.Unidade.nome %> · <%= e.Projetos.length %> projeto(s)</div>
+            <div class="small mt-1">Link de votação: <a href="/votar/<%= e.id %>"><%= baseUrl %>/votar/<%= e.id %></a></div>
+          </div>
+          <form method="post" action="/admin/eventos/<%= e.id %>/votacao" class="m-0">
+            <button class="btn btn-<%= e.votacaoAberta ? 'success' : 'outline-secondary' %>">
+              Votação: <%= e.votacaoAberta ? 'ABERTA (clique p/ encerrar)' : 'encerrada (clique p/ abrir)' %>
+            </button>
+          </form>
+        </div>
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <a class="btn btn-sm btn-outline-dark" href="/admin/eventos/<%= e.id %>/projetos">Projetos</a>
+          <a class="btn btn-sm btn-outline-dark" href="/admin/eventos/<%= e.id %>/questoes">Questões</a>
+          <a class="btn btn-sm btn-outline-dark" href="/dashboard/<%= e.id %>">Dashboard</a>
+          <a class="btn btn-sm btn-outline-dark" target="_blank" rel="noopener" href="/admin/eventos/<%= e.id %>/qr.svg">QR Code</a>
+          <a class="btn btn-sm btn-outline-secondary" href="/admin/eventos/<%= e.id %>/editar">Editar</a>
+          <form class="d-inline" method="post" action="/admin/eventos/<%= e.id %>/excluir" data-confirm="Excluir o evento e TODOS os projetos e votos?">
+            <button class="btn btn-sm btn-outline-danger">Excluir</button>
+          </form>
+        </div>
+      </div></div>
+    </div>
+  <% }) %>
+  <% if (!eventos.length) { %><div class="col-12"><div class="alert alert-info">Nenhum evento cadastrado. Cadastre uma unidade e crie o primeiro evento.</div></div><% } %>
+</div>

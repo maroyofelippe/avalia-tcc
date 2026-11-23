@@ -1,0 +1,19 @@
+<%- include('../../partials/evento-cabecalho', { evento }) %>
+<h2 class="h5">Questões exibidas na votação</h2>
+<p class="text-muted small">Marque as perguntas que o público responderá em cada projeto. Cadastre novas no <a href="/admin/questoes">banco de questões</a>.</p>
+<form method="post" action="/admin/eventos/<%= evento.id %>/questoes">
+  <div class="list-group mb-3">
+    <% questoes.forEach(function (q) { %>
+      <label class="list-group-item d-flex gap-3">
+        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="questoes" value="<%= q.id %>" <%= selecionadas.has(q.id) ? 'checked' : '' %>>
+        <span><%= q.texto %><% if (q.padrao) { %> <span class="badge text-bg-light">padrão</span><% } %></span>
+      </label>
+    <% }) %>
+    <% if (!questoes.length) { %><div class="list-group-item text-muted">Nenhuma questão ativa.</div><% } %>
+  </div>
+  <p class="small text-warning-emphasis">Atenção: alterar as questões com a votação em andamento mistura notas de questões diferentes no NPS do evento.</p>
+  <div class="d-flex gap-2">
+    <button class="btn btn-danger">Salvar seleção</button>
+    <a class="btn btn-outline-secondary" href="/admin/eventos">Voltar</a>
+  </div>
+</form>

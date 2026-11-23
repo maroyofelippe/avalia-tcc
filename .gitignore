@@ -1,0 +1,5 @@
+node_modules/
+.env
+src/public/uploads/logos/*
+!src/public/uploads/logos/.gitkeep
+.env.bak

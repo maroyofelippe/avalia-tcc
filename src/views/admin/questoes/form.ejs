@@ -1,0 +1,18 @@
+<h1 class="h4 mb-3"><%= titulo %></h1>
+<% if (erro) { %><div class="alert alert-danger"><%= erro %></div><% } %>
+<div class="card"><div class="card-body">
+  <form method="post" action="/admin/questoes<%= questao.id ? '/' + questao.id : '' %>">
+    <div class="mb-3">
+      <label class="form-label" for="texto">Texto da questão (resposta em nota de 0 a 10)</label>
+      <textarea class="form-control" id="texto" name="texto" rows="3" maxlength="300" required><%= questao.texto || '' %></textarea>
+    </div>
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="ativa" name="ativa" value="1" <%= questao.ativa ? 'checked' : '' %>>
+      <label class="form-check-label" for="ativa">Questão ativa</label>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-danger">Salvar</button>
+      <a class="btn btn-outline-secondary" href="/admin/questoes">Cancelar</a>
+    </div>
+  </form>
+</div></div>

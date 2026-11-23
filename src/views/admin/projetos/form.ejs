@@ -1,0 +1,37 @@
+<%- include('../../partials/evento-cabecalho', { evento }) %>
+<h2 class="h5 mb-3"><%= titulo %></h2>
+<% if (erro) { %><div class="alert alert-danger"><%= erro %></div><% } %>
+<div class="card"><div class="card-body">
+  <form method="post" action="/admin/eventos/<%= evento.id %>/projetos<%= projeto.id ? '/' + projeto.id : '' %>">
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label" for="titulo">Título do projeto</label>
+        <input class="form-control" id="titulo" name="titulo" maxlength="200" value="<%= projeto.titulo || '' %>" required>
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label" for="curso">Curso</label>
+        <input class="form-control" id="curso" name="curso" maxlength="120" value="<%= projeto.curso || '' %>" placeholder="Desenvolvimento de Sistemas">
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label" for="turma">Turma</label>
+        <input class="form-control" id="turma" name="turma" maxlength="40" value="<%= projeto.turma || '' %>" placeholder="3º DS A" required>
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label" for="ano">Ano</label>
+        <input class="form-control" type="number" id="ano" name="ano" min="2000" max="2100" value="<%= projeto.ano || '' %>" required>
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="equipe">Equipe (um integrante por linha)</label>
+        <textarea class="form-control" id="equipe" name="equipe" rows="3"><%= projeto.equipe || '' %></textarea>
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="descricao">Descrição</label>
+        <textarea class="form-control" id="descricao" name="descricao" rows="3"><%= projeto.descricao || '' %></textarea>
+      </div>
+    </div>
+    <div class="mt-4 d-flex gap-2">
+      <button class="btn btn-danger">Salvar</button>
+      <a class="btn btn-outline-secondary" href="/admin/eventos/<%= evento.id %>/projetos">Cancelar</a>
+    </div>
+  </form>
+</div></div>

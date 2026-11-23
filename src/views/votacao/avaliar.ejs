@@ -1,0 +1,29 @@
+<%- include('../partials/evento-cabecalho', { evento }) %>
+<div class="card mb-3"><div class="card-body">
+  <h2 class="h5 mb-1"><%= projeto.titulo %></h2>
+  <div class="small text-muted">Turma <%= projeto.turma %> · <%= projeto.ano %></div>
+</div></div>
+
+<% if (erro) { %><div class="alert alert-danger"><%= erro %></div><% } %>
+<% if (!questoes.length) { %><div class="alert alert-warning">Nenhuma questão foi selecionada para este evento.</div><% } %>
+
+<form method="post" action="/votar/<%= evento.id %>/projetos/<%= projeto.id %>">
+  <p class="small text-muted">Use a escala de <strong>0</strong> (nada provável) a <strong>10</strong> (extremamente provável).</p>
+  <% questoes.forEach(function (q, i) { %>
+    <fieldset class="card mb-3">
+      <div class="card-body">
+        <legend class="h6 mb-3"><%= i + 1 %>. <%= q.texto %></legend>
+        <div class="nota-grupo">
+          <% for (let n = 0; n <= 10; n++) { %>
+            <input type="radio" name="nota_<%= q.id %>" id="q<%= q.id %>n<%= n %>" value="<%= n %>" required>
+            <label for="q<%= q.id %>n<%= n %>" class="<%= n <= 6 ? 'n-det' : n <= 8 ? 'n-neu' : 'n-pro' %>"><%= n %></label>
+          <% } %>
+        </div>
+      </div>
+    </fieldset>
+  <% }) %>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="/votar/<%= evento.id %>/projetos">Voltar</a>
+    <button class="btn btn-danger flex-fill" <%= questoes.length ? '' : 'disabled' %>>Enviar avaliação</button>
+  </div>
+</form>

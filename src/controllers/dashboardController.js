@@ -15,7 +15,10 @@ exports.view = async (req, res) => {
   // Admin logado: atualização a cada 2 min; demais: 3 min
   const admin = req.usuario && req.usuario.perfil === 'admin';
   const intervaloSeg = admin ? env.refreshAdminSeg : env.refreshPublicoSeg;
-  res.render('dashboard/index', { titulo: `Resultados — ${evento.nome}`, evento, intervaloSeg });
+  // QR Code (SVG inline) com o link público de votação, para o público acessar a partir da tela de resultados
+  const urlVotacao = `${req.protocol}://${req.get('host')}/votar/${evento.id}`;
+  const qrSvg = await require('qrcode').toString(urlVotacao, { type: 'svg', margin: 1, width: 140 });
+  res.render('dashboard/index', { titulo: `Resultados — ${evento.nome}`, evento, intervaloSeg, qrSvg, urlVotacao });
 };
 
 exports.metricas = async (req, res) => {

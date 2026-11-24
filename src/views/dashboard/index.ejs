@@ -1,6 +1,10 @@
 <div id="dash" data-evento="<%= evento.id %>" data-intervalo="<%= intervaloSeg %>">
   <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <%- include('../partials/evento-cabecalho', { evento }) %>
+    <div class="text-center small text-muted" style="width:140px">
+      <div class="bg-white border rounded p-1" role="img" aria-label="QR Code para votar"><%- qrSvg %></div>
+      <div class="mt-1">Escaneie para votar</div>
+    </div>
     <div class="text-end small text-muted">
       <div>Atualizado às <strong id="atualizado-em">—</strong></div>
       <div>Próxima atualização em <strong id="contagem">—</strong> (a cada <%= Math.round(intervaloSeg / 60 * 10) / 10 %> min)</div>

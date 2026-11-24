@@ -1,5 +1,5 @@
 <%- include('../partials/evento-cabecalho', { evento }) %>
-<p class="text-muted">Olá, <strong><%= votante.alias %></strong>! Escolha um trabalho para avaliar (<%= jaAvaliou.size %> de <%= projetos.length %> avaliados).</p>
+<p class="text-muted">Olá! Escolha um trabalho para avaliar (<%= jaAvaliou.size %> de <%= projetos.length %> avaliados).</p>
 
 <% if (!projetos.length) { %><div class="alert alert-info">Nenhum projeto cadastrado neste evento.</div><% } %>
 

@@ -1,3 +1,4 @@
+const { gerarHash, normalizarNome, calcularIdade } = require('../services/votanteService');
 const { Evento, Unidade, Projeto, Questao, Votante, Voto, sequelize } = require('../models');
 
 const RELACOES = ['aluno', 'ex_aluno', 'responsavel', 'professor'];
@@ -46,17 +47,19 @@ exports.identificar = async (req, res) => {
   const evento = await carregarEventoAberto(req, res);
   if (!evento) return;
   const dados = {
-    alias: String(req.body.alias || '').trim(),
+    nome: normalizarNome(req.body.nome),
     relacao: req.body.relacao,
     dataNascimento: req.body.data_nascimento,
   };
   let erro = null;
-  if (dados.alias.length < 2 || dados.alias.length > 60) erro = 'Informe um nome ou apelido (2 a 60 caracteres).';
+  if (dados.nome.length < 2 || dados.nome.length > 120) erro = 'Informe seu nome (2 a 120 caracteres).';
   else if (!RELACOES.includes(dados.relacao)) erro = 'Selecione sua relação com a unidade.';
   else if (!dataNascimentoValida(dados.dataNascimento)) erro = 'Informe uma data de nascimento válida.';
-  if (erro) return res.status(422).render('votacao/identificacao', { titulo: 'Identificação', evento, dados, erro });
+  if (erro) return res.status(422).render('votacao/identificacao', { titulo: 'Identificação', evento, dados: { relacao: dados.relacao }, erro });
 
-  const votante = await Votante.create({ eventoId: evento.id, ...dados });
+  // Só o hash é gravado; a mesma pessoa (nome + nascimento) reaproveita o mesmo registro no evento
+  const hash = gerarHash(dados.nome, dados.dataNascimento);
+  const [votante] = await Votante.findOrCreate({ where: { eventoId: evento.id, hash }, defaults: { relacao: dados.relacao, idade: calcularIdade(dados.dataNascimento) } });
   res.cookie(cookieVotante(evento.id), votante.token, { httpOnly: true, sameSite: 'lax', maxAge: 2 * 24 * 3600 * 1000 });
   res.redirect(`/votar/${evento.id}/projetos`);
 };

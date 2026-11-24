@@ -21,6 +21,7 @@ module.exports = {
     sslCa: process.env.DB_SSL_CA || '',
   },
   jwtSecret: process.env.JWT_SECRET || 'segredo-apenas-para-desenvolvimento',
+  votanteHashSecret: process.env.VOTANTE_HASH_SECRET || process.env.JWT_SECRET || 'segredo-apenas-para-desenvolvimento',
   sessaoMinutos: Number(process.env.SESSAO_MINUTOS) || 30,
   // true apenas se o site for servido por HTTPS
   cookieSecure: process.env.COOKIE_SECURE === 'true',

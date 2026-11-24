@@ -65,9 +65,10 @@ async function metricasEvento(eventoId) {
     q(`SELECT COUNT(DISTINCT (v.votante_id, v.projeto_id)) AS votos,
               COUNT(DISTINCT v.votante_id) AS avaliadores
          FROM votos v WHERE v.evento_id = :eventoId`),
-    q(`SELECT EXTRACT(YEAR FROM age(CURRENT_DATE, vt.data_nascimento))::int AS idade
+    q(`SELECT vt.idade
          FROM votantes vt
         WHERE vt.evento_id = :eventoId
+          AND vt.idade IS NOT NULL
           AND EXISTS (SELECT 1 FROM votos v WHERE v.votante_id = vt.id)`),
     q(`SELECT vt.relacao, COUNT(*) AS total
          FROM votantes vt

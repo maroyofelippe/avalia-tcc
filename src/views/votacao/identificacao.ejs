@@ -4,12 +4,12 @@
     <div class="card">
       <div class="card-body p-4">
         <h2 class="h5">Antes de votar</h2>
-        <p class="text-muted small">Não pedimos e-mail nem sobrenome. Estes dados servem apenas para estatísticas do evento (por exemplo, faixa etária do público).</p>
+        <p class="text-muted small">Seu nome e data de nascimento não são armazenados: são convertidos em um código irreversível (hash) usado apenas para garantir que cada pessoa vote uma única vez.</p>
         <% if (erro) { %><div class="alert alert-danger py-2"><%= erro %></div><% } %>
         <form method="post" action="/votar/<%= evento.id %>">
           <div class="mb-3">
-            <label class="form-label" for="alias">Nome ou apelido</label>
-            <input class="form-control form-control-lg" id="alias" name="alias" maxlength="60" value="<%= dados.alias || '' %>" required>
+            <label class="form-label" for="nome">Nome</label>
+            <input class="form-control form-control-lg" id="nome" name="nome" maxlength="120" autocomplete="off" required>
           </div>
           <div class="mb-3">
             <label class="form-label" for="relacao">Relação com a unidade</label>
@@ -22,7 +22,7 @@
           </div>
           <div class="mb-3">
             <label class="form-label" for="data_nascimento">Data de nascimento</label>
-            <input class="form-control form-control-lg" type="date" id="data_nascimento" name="data_nascimento" value="<%= dados.dataNascimento || '' %>" max="<%= new Date().toISOString().slice(0, 10) %>" required>
+            <input class="form-control form-control-lg" type="date" id="data_nascimento" name="data_nascimento" autocomplete="off" max="<%= new Date().toISOString().slice(0, 10) %>" required>
           </div>
           <button class="btn btn-danger btn-lg w-100">Continuar</button>
         </form>

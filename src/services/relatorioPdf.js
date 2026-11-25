@@ -1,8 +1,18 @@
+const fs = require('fs');
+const path = require('path');
 const PDFDocument = require('pdfkit');
 const { analisar, zonaNps, DICAS_FUTURAS, MIN_AVALIACOES, fmt, pct } = require('./relatorioInsights');
 
 const COR = { marca: '#b20000', texto: '#212529', suave: '#6c757d', linha: '#dee2e6', fundo: '#f8f9fa', prom: '#198754', neu: '#f0ad4e', det: '#dc3545', azul: '#0d6efd', roxo: '#6f42c1' };
 const M = 50; // margem
+const PUBLIC = path.join(__dirname, '..', 'public');
+
+// Caminho em disco do logo da unidade (PNG/JPG; WEBP não é suportado pelo PDFKit)
+function caminhoLogo(unidade) {
+  if (!unidade || !unidade.logo) return null;
+  const arquivo = path.join(PUBLIC, 'uploads', 'logos', path.basename(unidade.logo));
+  return /\.(png|jpe?g)$/i.test(arquivo) && fs.existsSync(arquivo) ? arquivo : null;
+}
 
 function dataBR(d) {
   if (!d) return '—';
@@ -126,6 +136,13 @@ function gerarRelatorioPdf({ evento, unidade, metricas: m, detalhe }, saida) {
   doc.rect(0, 0, doc.page.width, 90).fill(COR.marca);
   doc.fillColor('#ffffff').font('Helvetica-Bold').fontSize(20).text('Relatório da Exposição de TCC', M, 26);
   doc.font('Helvetica').fontSize(11).text(`${evento.nome} · ${evento.ano}`, M, 54);
+  const logo = caminhoLogo(unidade);
+  if (logo) {
+    try {
+      doc.roundedRect(doc.page.width - M - 70, 10, 70, 70, 6).fill('#ffffff');
+      doc.image(logo, doc.page.width - M - 66, 14, { fit: [62, 62], align: 'center', valign: 'center' });
+    } catch (e) { /* imagem inválida: o relatório segue sem o logo */ }
+  }
   doc.y = 105;
   doc.fillColor(COR.texto).font('Helvetica').fontSize(10);
   paragrafo(doc, `Unidade: ${unidade ? unidade.nome : '—'}    |    Data do evento: ${dataBR(evento.dataEvento)}    |    Gerado em: ${new Date().toLocaleString('pt-BR')}`, { cor: COR.suave, tamanho: 9 });
@@ -205,7 +222,24 @@ function gerarRelatorioPdf({ evento, unidade, metricas: m, detalhe }, saida) {
   DICAS_FUTURAS.forEach(([t, x]) => item(doc, t, x));
 
   titulo(doc, 'Nota metodológica');
-  paragrafo(doc, 'NPS (Net Promoter Score) = % de promotores (notas 9–10) − % de detratores (notas 0–6); notas 7–8 são neutras. Resultado de −100 a +100. Zonas de referência: abaixo de 0 crítica; 0–49 aperfeiçoamento; 50–74 qualidade; 75 ou mais excelência. "Avaliadores" são pessoas distintas que avaliaram o trabalho. Por segurança estatística, rankings e comparações ignoram trabalhos e critérios com menos de ' + MIN_AVALIACOES + ' avaliadores.', { tamanho: 9 });
+  // Fórmula do NPS, com o cálculo real da exposição como exemplo
+  garantirEspaco(doc, 150);
+  const larguraBox = doc.page.width - 2 * M;
+  const yBox = doc.y;
+  doc.roundedRect(M, yBox, larguraBox, 112, 4).fillAndStroke(COR.fundo, COR.linha);
+  doc.fillColor(COR.marca).font('Helvetica-Bold').fontSize(11).text('Fórmula do NPS', M + 12, yBox + 8);
+  doc.fillColor(COR.texto).font('Helvetica-Bold').fontSize(11).text('NPS = (Promotores ÷ Total - Detratores ÷ Total) × 100', M + 12, yBox + 25);
+  doc.font('Helvetica').fontSize(9).text('Total = Promotores + Neutros + Detratores   |   Promotores: notas 9–10   |   Neutros: 7–8   |   Detratores: 0–6', M + 12, yBox + 43, { width: larguraBox - 24 });
+  const g = m.npsFeira;
+  const T = g.promotores + g.neutros + g.detratores;
+  doc.fillColor(COR.suave).font('Helvetica-Bold').fontSize(9).text('Exemplo com os dados desta exposição:', M + 12, yBox + 63);
+  doc.fillColor(COR.texto).font('Helvetica').fontSize(9).text(
+    T
+      ? `Promotores = ${g.promotores}, Neutros = ${g.neutros}, Detratores = ${g.detratores}, Total = ${T}\nNPS = (${g.promotores} ÷ ${T} - ${g.detratores} ÷ ${T}) × 100 = (${fmt((g.promotores / T) * 100)}% - ${fmt((g.detratores / T) * 100)}%) = ${g.nps}`
+      : 'Sem notas registradas neste evento.',
+    M + 12, yBox + 77, { width: larguraBox - 24, lineGap: 2 });
+  doc.y = yBox + 124;
+  paragrafo(doc, 'O resultado varia de -100 (todos detratores) a +100 (todos promotores). Zonas de referência: abaixo de 0 crítica; 0–49 aperfeiçoamento; 50–74 qualidade; 75 ou mais excelência. "Avaliadores" são pessoas distintas que avaliaram o trabalho. Por segurança estatística, rankings e comparações ignoram trabalhos e critérios com menos de ' + MIN_AVALIACOES + ' avaliadores.', { tamanho: 9 });
   paragrafo(doc, 'Privacidade (LGPD): o sistema não armazena nome nem data de nascimento dos votantes; guarda apenas um código irreversível (hash), a idade e a relação com a unidade. Os insights são gerados automaticamente por regras sobre os dados e devem ser interpretados com o contexto local.', { tamanho: 9 });
 
   // Rodapé com paginação

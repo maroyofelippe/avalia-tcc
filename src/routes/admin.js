@@ -31,6 +31,7 @@ router.get('/eventos/:id/editar', wrap(evento.editar));
 router.post('/eventos/:id', wrap(evento.atualizar));
 router.post('/eventos/:id/excluir', wrap(evento.excluir));
 router.post('/eventos/:id/votacao', wrap(evento.alternarVotacao));
+router.get('/eventos/:id/relatorio.pdf', wrap(evento.relatorioPdf));
 router.get('/eventos/:id/qr.svg', wrap(evento.qr));
 router.get('/eventos/:id/questoes', wrap(evento.questoesForm));
 router.post('/eventos/:id/questoes', wrap(evento.questoesSalvar));

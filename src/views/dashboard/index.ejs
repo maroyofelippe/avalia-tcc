@@ -9,6 +9,7 @@
       <div>Atualizado às <strong id="atualizado-em">—</strong></div>
       <div>Próxima atualização em <strong id="contagem">—</strong> (a cada <%= Math.round(intervaloSeg / 60 * 10) / 10 %> min)</div>
       <button id="btn-atualizar" class="btn btn-sm btn-outline-dark mt-1">Atualizar agora</button>
+      <a class="btn btn-sm btn-outline-danger mt-1" href="/admin/eventos/<%= evento.id %>/relatorio.pdf">Exportar relatório PDF</a>
       <div id="erro-atualizacao" class="text-danger d-none">Falha ao atualizar; tentaremos novamente.</div>
     </div>
   </div>

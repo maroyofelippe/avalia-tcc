@@ -1,5 +1,8 @@
 const { Evento, Unidade, Questao, EventoQuestao, Projeto } = require('../models');
 
+const { metricasEvento, detalheProjetoQuestao } = require('../services/npsService');
+const { gerarRelatorioPdf } = require('../services/relatorioPdf');
+
 const naoEncontrado = (res) =>
   res.status(404).render('erro', { titulo: 'Não encontrado', mensagem: 'Evento não encontrado.', status: 404 });
 
@@ -98,6 +101,16 @@ exports.alternarVotacao = async (req, res) => {
   await evento.save();
   res.flash('sucesso', evento.votacaoAberta ? 'Votação aberta ao público.' : 'Votação encerrada.');
   res.redirect(req.get('Referer') || '/admin/eventos');
+};
+
+// Relatório final do evento em PDF (somente usuários logados: rota sob /admin)
+exports.relatorioPdf = async (req, res) => {
+  const evento = await Evento.findByPk(req.params.id, { include: Unidade });
+  if (!evento) return naoEncontrado(res);
+  const [metricas, detalhe] = await Promise.all([metricasEvento(evento.id), detalheProjetoQuestao(evento.id)]);
+  const arquivo = `relatorio-${evento.nome}-${evento.ano}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase();
+  res.set({ 'Content-Type': 'application/pdf', 'Content-Disposition': `attachment; filename="${arquivo}.pdf"`, 'Cache-Control': 'no-store' });
+  gerarRelatorioPdf({ evento, unidade: evento.Unidade, metricas, detalhe }, res);
 };
 
 // QR Code (SVG) com o link público de votação do evento

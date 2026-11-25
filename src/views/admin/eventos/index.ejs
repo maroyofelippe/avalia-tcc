@@ -24,6 +24,7 @@
           <a class="btn btn-sm btn-outline-dark" href="/admin/eventos/<%= e.id %>/projetos">Projetos</a>
           <a class="btn btn-sm btn-outline-dark" href="/admin/eventos/<%= e.id %>/questoes">Questões</a>
           <a class="btn btn-sm btn-outline-dark" href="/dashboard/<%= e.id %>">Dashboard</a>
+          <a class="btn btn-sm btn-outline-dark" href="/admin/eventos/<%= e.id %>/relatorio.pdf">Relatório PDF</a>
           <a class="btn btn-sm btn-outline-dark" target="_blank" rel="noopener" href="/admin/eventos/<%= e.id %>/qr.svg">QR Code</a>
           <a class="btn btn-sm btn-outline-secondary" href="/admin/eventos/<%= e.id %>/editar">Editar</a>
           <form class="d-inline" method="post" action="/admin/eventos/<%= e.id %>/excluir" data-confirm="Excluir o evento e TODOS os projetos e votos?">

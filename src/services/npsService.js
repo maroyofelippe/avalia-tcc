@@ -109,4 +109,24 @@ async function metricasEvento(eventoId) {
   };
 }
 
-module.exports = { metricasEvento, calcularNps, FAIXAS_ETARIAS, ROTULOS_RELACAO };
+// Detalhe projeto × questão (média e NPS de cada critério em cada trabalho) — usado no relatório
+async function detalheProjetoQuestao(eventoId) {
+  const rows = await sequelize.query(
+    `SELECT v.projeto_id, v.questao_id, q.texto, AVG(v.nota) AS media, ${SQL_FAIXAS}
+       FROM votos v
+       JOIN questoes q ON q.id = v.questao_id
+      WHERE v.evento_id = :eventoId
+      GROUP BY v.projeto_id, v.questao_id, q.texto
+      ORDER BY v.projeto_id, v.questao_id`,
+    { replacements: { eventoId }, type: QueryTypes.SELECT }
+  );
+  return rows.map((r) => ({
+    projetoId: r.projeto_id,
+    questaoId: r.questao_id,
+    texto: r.texto,
+    media: Number(r.media) || 0,
+    ...montarLinha(r),
+  }));
+}
+
+module.exports = { metricasEvento, detalheProjetoQuestao, calcularNps, FAIXAS_ETARIAS, ROTULOS_RELACAO };

@@ -145,7 +145,7 @@ function gerarRelatorioPdf({ evento, unidade, metricas: m, detalhe }, saida) {
   }
   doc.y = 105;
   doc.fillColor(COR.texto).font('Helvetica').fontSize(10);
-  paragrafo(doc, `Unidade: ${unidade ? unidade.nome : '—'}    |    Data do evento: ${dataBR(evento.dataEvento)}    |    Gerado em: ${new Date().toLocaleString('pt-BR')}`, { cor: COR.suave, tamanho: 9 });
+  paragrafo(doc, `Unidade: ${unidade ? unidade.nome : '—'}    |    Data do evento: ${dataBR(evento.dataEvento)}    |    Gerado em: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`, { cor: COR.suave, tamanho: 9 });
 
   kpis(doc, [
     { valor: m.totalVotos, rotulo: 'Avaliações (votante × trabalho)' },
